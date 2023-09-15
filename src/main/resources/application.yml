@@ -1,0 +1,18 @@
+server:
+  port: 8081
+
+me:
+  profile: default
+
+site:
+  link: https://feelpass.cn
+
+--- # local profile
+spring.config.activate.on-profile: local
+me:
+  profile: local
+
+--- # prd profile
+spring.config.activate.on-profile: prod
+me:
+  profile: local
