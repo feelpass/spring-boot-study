@@ -5,6 +5,7 @@ import com.example.profile.config.SiteConfig
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.shouldBe
+import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
@@ -24,11 +25,12 @@ class AppApplicationTests : DescribeSpec() {
         this.describe("AppConfig") {
             context("appConfig.nickname") {
                 it("should be feelpass222") {
-                    appConfig.nickname shouldBe "feelpass222"
+                    appConfig.profile shouldBe "local"
                     siteConfig.link shouldBe "https://feelpass.cn"
                 }
             }
         }
+
     }
 }
 

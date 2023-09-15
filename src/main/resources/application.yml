@@ -4,6 +4,17 @@ server:
 me:
   profile: default
 
+
+spring:
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+
+
+
 site:
   link: https://feelpass.cn
 
