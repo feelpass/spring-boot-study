@@ -1,17 +1,24 @@
 server:
-  port: 8081
+  port: 8083
 
 me:
   profile: default
 
 
 spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
   jpa:
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+    # ??? ?? ? ? data.sql ??
     defer-datasource-initialization: true
+  h2:
+    console:
+      enabled: true
 
 
 
@@ -27,3 +34,23 @@ me:
 spring.config.activate.on-profile: prod
 me:
   profile: local
+
+
+--- # test profile
+spring.config.activate.on-profile: test
+me:
+  profile: test
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    # ??? ?? ? ? data.sql ??
+    defer-datasource-initialization: true
+  h2:
+    console:
+      enabled: true
