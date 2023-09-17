@@ -1,5 +1,5 @@
 server:
-  port: 8083
+  port: 8084
 
 me:
   profile: default
@@ -16,6 +16,10 @@ spring:
         format_sql: true
     # ??? ?? ? ? data.sql ??
     defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
   h2:
     console:
       enabled: true
@@ -40,17 +44,6 @@ me:
 spring.config.activate.on-profile: test
 me:
   profile: test
-spring:
-  datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-  jpa:
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-    # ??? ?? ? ? data.sql ??
-    defer-datasource-initialization: true
-  h2:
-    console:
-      enabled: true
+
+server:
+  port: 8085

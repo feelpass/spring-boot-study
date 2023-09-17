@@ -27,12 +27,13 @@ class TypeController(val typeService: TypesService) {
 
     @PostMapping("/types")
     fun createType(@RequestBody type: CreateTypeDto): ResponseEntity<TypeResponseDto> {
-        return ResponseEntity.ok(typeService.createType(type))
+        val created = typeService.createType(type)
+        return ResponseEntity.ok(created)
     }
 
     @DeleteMapping("/types/{id}")
     fun deleteType(@PathVariable id: Int): ResponseEntity<Unit> {
-        typeService.deleteType(id)
+        typeService.deleteById(id)
         return ResponseEntity.ok().build()
     }
 }

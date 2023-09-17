@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 class Type(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
-    @Id val id: Int?,
+    @Id val id: Int? = null,
     val name: String,
 ) : BaseTimeEntity() {
 }

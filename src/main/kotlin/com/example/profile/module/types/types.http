@@ -1,8 +1,18 @@
 
 ###
-POST http://localhost:8083/types
+POST http://localhost:8084/types
 Content-Type: application/json
 
 {
   "name": "type1"
 }
+
+
+
+###
+GET http://localhost:8084/types
+Content-Type: application/json
+
+###
+DELETE http://localhost:8084/types/1
+

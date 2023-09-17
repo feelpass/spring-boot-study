@@ -23,7 +23,6 @@ import org.springframework.web.filter.CharacterEncodingFilter
 @SpringBootTest
 @AutoConfigureMockMvc //  MockMvc를 사용하기 위해 필요한 어노테이션
 class TypeControllerTest(
-
     val context: WebApplicationContext,
     val typesController: TypeController,
     val objectMapper: ObjectMapper
@@ -35,14 +34,14 @@ class TypeControllerTest(
         extension(SpringExtension)
 
         // beforeeach
-        beforeEach {
+        beforeTest {
             mockMvc = MockMvcBuilders.webAppContextSetup(context)
                 .addFilter<DefaultMockMvcBuilder>(CharacterEncodingFilter("UTF-8", true)) // 필터 추가
                 .alwaysDo<DefaultMockMvcBuilder>(::print) // 모든 요청과 응답을 콘솔에 출력
                 .build()
         }
 
-        afterEach {
+        beforeTest {
 
         }
 
@@ -72,6 +71,14 @@ class TypeControllerTest(
                     )
                     result.andExpect(status().isOk)
                 }
+                it("delete") {
+                    val result = mockMvc.perform(
+                        delete("/types/1")
+                    )
+                    result.andExpect(status().isOk)
+                }
+
+
             }
         }
     }

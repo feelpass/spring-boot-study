@@ -5,6 +5,7 @@ import com.example.profile.module.types.dto.TypeResponseDto
 import com.example.profile.module.types.dto.toDto
 import com.example.profile.module.types.dto.toEntity
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class TypesService(private val typesRepository: TypesRepository) {
@@ -15,11 +16,12 @@ class TypesService(private val typesRepository: TypesRepository) {
         IllegalArgumentException("not found: $id")
     }.toDto()
 
+    @Transactional
     fun createType(createTypeDto: CreateTypeDto): TypeResponseDto {
         return typesRepository.save(createTypeDto.toEntity()).toDto()
     }
 
-    fun deleteType(id: Int) {
+    fun deleteById(id: Int) {
         typesRepository.deleteById(id)
     }
 }
