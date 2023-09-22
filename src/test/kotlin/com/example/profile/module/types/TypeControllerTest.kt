@@ -3,9 +3,12 @@ package com.example.profile.module.types
 import com.example.profile.module.types.dto.CreateTypeDto
 import com.example.profile.module.types.dto.TypeResponseDto
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.ninjasquad.springmockk.MockkBean
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.shouldBe
+import io.mockk.every
+import org.junit.jupiter.api.TestInstance
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
@@ -14,40 +17,40 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder
-import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
-import org.springframework.web.filter.CharacterEncodingFilter
 
 @ActiveProfiles("test")
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc //  MockMvc를 사용하기 위해 필요한 어노테이션
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TypeControllerTest(
     val context: WebApplicationContext,
     val typesController: TypeController,
-    val objectMapper: ObjectMapper
+    val objectMapper: ObjectMapper,
+    val mockMvc: MockMvc,
 ) : DescribeSpec() {
 
-    lateinit var mockMvc: MockMvc
+    @MockkBean(relaxed = true)
+    lateinit var typesService: TypesService
 
     init {
         extension(SpringExtension)
 
-        // beforeeach
-        beforeTest {
-            mockMvc = MockMvcBuilders.webAppContextSetup(context)
-                .addFilter<DefaultMockMvcBuilder>(CharacterEncodingFilter("UTF-8", true)) // 필터 추가
-                .alwaysDo<DefaultMockMvcBuilder>(::print) // 모든 요청과 응답을 콘솔에 출력
-                .build()
-        }
-
-        beforeTest {
-
-        }
 
         describe("test") {
+
             context("test") {
-                it("test") {
+                it("get all") {
+                    every {
+                        typesService.getTypes()
+                    } answers {
+                        listOf(
+                            TypeResponseDto(1, "system"),
+                            TypeResponseDto(2, "samsung"),
+                            TypeResponseDto(3, "hot")
+                        )
+                    }
+
                     val list = listOf(
                         TypeResponseDto(1, "system"),
                         TypeResponseDto(2, "samsung"),
@@ -56,12 +59,32 @@ class TypeControllerTest(
                     val result = typesController.getTypes()
                     result.body shouldBe list
                 }
-                it("test2") {
+
+
+                it("get one") {
+                    every {
+                        typesService.getType(any())
+                    } answers {
+                        TypeResponseDto(1, "system")
+                    }
                     val result = mockMvc.perform(get("/types/1").accept(MediaType.APPLICATION_JSON))
                     result.andExpect(status().isOk)
                         .andExpect(jsonPath("$.id").value(1))
-                        .andExpect(jsonPath("$.name").value("system"))
+                        .andExpect(jsonPath("$.type_name").value("system"))
                 }
+
+                it("get two") {
+                    every {
+                        typesService.getType(any())
+                    } answers {
+                        TypeResponseDto(1, "system")
+                    }
+                    val result = mockMvc.perform(get("/types/1").accept(MediaType.APPLICATION_JSON))
+                    result.andExpect(status().isOk)
+                        .andExpect(jsonPath("$.id").value(1))
+                        .andExpect(jsonPath("$.type_name").value("system"))
+                }
+
                 it("create") {
                     val result = mockMvc.perform(
                         post("/types")
@@ -71,14 +94,13 @@ class TypeControllerTest(
                     )
                     result.andExpect(status().isOk)
                 }
+
                 it("delete") {
                     val result = mockMvc.perform(
                         delete("/types/1")
                     )
                     result.andExpect(status().isOk)
                 }
-
-
             }
         }
     }

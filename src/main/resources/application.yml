@@ -1,14 +1,12 @@
 server:
   port: 8084
-
 me:
   profile: default
-
-
 spring:
   datasource:
     url: jdbc:h2:mem:testdb
     username: sa
+
   jpa:
     show-sql: true
     properties:
@@ -16,18 +14,27 @@ spring:
         format_sql: true
     # ??? ?? ? ? data.sql ??
     defer-datasource-initialization: true
-
   sql:
     init:
       mode: always
   h2:
     console:
       enabled: true
-
-
+  output:
+    ansi:
+      enabled: always
+  jackson:
+    property-naming-strategy: SNAKE_CASE
 
 site:
   link: https://feelpass.cn
+logging:
+  level:
+    root: ERROR
+    org.springframework.web: DEBUG
+    org.hibernate: ERROR
+    com.example.profile: DEBUG
+
 
 --- # local profile
 spring.config.activate.on-profile: local
